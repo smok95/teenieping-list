@@ -160,22 +160,19 @@ searchInput.addEventListener('input', (e) => {
 // Show total count
 document.querySelector('.subtitle').textContent = `캐치! 티니핑 캐릭터 모음 (총 ${TEENIEPING_DATA.length}마리)`;
 
-// Hide header on scroll down, show on scroll up
+// Hide header when scrolled down, show only at top
 (function() {
   const header = document.querySelector('header');
-  let lastScrollY = window.scrollY;
   let ticking = false;
 
   window.addEventListener('scroll', () => {
     if (!ticking) {
       requestAnimationFrame(() => {
-        const currentScrollY = window.scrollY;
-        if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        if (window.scrollY > 80) {
           header.classList.add('header-hidden');
         } else {
           header.classList.remove('header-hidden');
         }
-        lastScrollY = currentScrollY;
         ticking = false;
       });
       ticking = true;
