@@ -174,4 +174,7 @@ const TEENIEPING_DATA = [
   { name: "트롯핑", category: "프린스 티니핑 (6기)", type: "normal", image: "assets/트롯핑.webp" },
   { name: "깨굴핑", category: "프린스 티니핑 (6기)", type: "normal", image: "assets/깨굴핑.webp" },
   { name: "젠틀핑", category: "프린스 티니핑 (6기)", type: "normal", image: "assets/젠틀핑.webp" },
+
+  // ===== 빌런 티니핑 =====
+  { name: "트러핑", category: "빌런 티니핑", type: "normal", image: "assets/트러핑.webp" },
 ];
