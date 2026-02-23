@@ -107,6 +107,7 @@ const TEENIEPING_DATA = [
   { name: "얌얌핑", category: "열쇠 티니핑 (3기)", type: "normal", image: "assets/얌얌핑.webp" },
   { name: "뜨거핑", category: "열쇠 티니핑 (3기)", type: "normal", image: "assets/뜨거핑.webp" },
   { name: "삐뽀핑", category: "열쇠 티니핑 (3기)", type: "normal", image: "assets/삐뽀핑.webp" },
+  { name: "간호핑", category: "열쇠 티니핑 (3기)", type: "normal", image: "assets/간호핑.webp" },
   { name: "힘내핑", category: "열쇠 티니핑 (3기)", type: "normal", image: "assets/힘내핑.webp" },
   { name: "고쳐핑", category: "열쇠 티니핑 (3기)", type: "normal", image: "assets/고쳐핑.webp" },
   { name: "아라핑", category: "열쇠 티니핑 (3기)", type: "normal", image: "assets/아라핑.webp" },
