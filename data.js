@@ -180,4 +180,5 @@ const TEENIEPING_DATA = [
   { name: "트러핑", category: "빌런 티니핑", type: "normal", image: "assets/트러핑.webp" },
   { name: "다해핑", category: "빌런 티니핑", type: "normal", image: "assets/다해핑.webp" },
   { name: "가면핑", category: "빌런 티니핑", type: "normal", image: "assets/가면핑.webp" },
+  { name: "악동핑", category: "빌런 티니핑", type: "normal", image: "assets/악동핑.webp" },
 ];
