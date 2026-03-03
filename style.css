@@ -178,6 +178,11 @@ main {
   color: #4a148c;
 }
 
+.card.villain .card-name {
+  background: linear-gradient(135deg, #fce4ec, #e8d5ff);
+  color: #880e4f;
+}
+
 /* Modal */
 .modal-overlay {
   display: none;
@@ -235,10 +240,50 @@ main {
   margin-bottom: 8px;
 }
 
-.modal-category {
-  font-size: 14px;
+.modal-tags {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.tier-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tier-badge.tier-royal {
+  background: linear-gradient(135deg, #ff6fb7, #ff9a9e);
+}
+
+.tier-badge.tier-legend {
+  background: linear-gradient(135deg, #7c4dff, #ab7aff);
+}
+
+.tier-badge.tier-villain {
+  background: linear-gradient(135deg, #424242, #757575);
+}
+
+.modal-season-info {
+  font-size: 13px;
   color: #ab7aff;
   font-weight: 600;
+}
+
+.modal-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  padding: 0 4px;
+  text-align: left;
 }
 
 .modal-actions {

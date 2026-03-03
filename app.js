@@ -2,25 +2,30 @@ const app = document.getElementById('app');
 const nav = document.getElementById('category-nav');
 const searchInput = document.getElementById('search');
 
-// Get unique categories in order
-const categories = [...new Set(TEENIEPING_DATA.map(t => t.category))];
+// Fixed nav items
+const NAV_ITEMS = [
+  { label: '전체', filter: null },
+  { label: '1기', filter: { type: 'season', value: '1기' } },
+  { label: '2기', filter: { type: 'season', value: '2기' } },
+  { label: '3기', filter: { type: 'season', value: '3기' } },
+  { label: '4기', filter: { type: 'season', value: '4기' } },
+  { label: '5기', filter: { type: 'season', value: '5기' } },
+  { label: '6기', filter: { type: 'season', value: '6기' } },
+  { label: '레전드', filter: { type: 'tier', value: 'legend' } },
+  { label: '빌런', filter: { type: 'tier', value: 'villain' } },
+];
 
-// Build category nav
-const allBtn = document.createElement('button');
-allBtn.textContent = '전체';
-allBtn.className = 'active';
-allBtn.addEventListener('click', () => {
-  setActiveNav(allBtn);
-  render();
-});
-nav.appendChild(allBtn);
+let currentFilter = null;
 
-categories.forEach(cat => {
+// Build nav buttons
+NAV_ITEMS.forEach((item, idx) => {
   const btn = document.createElement('button');
-  btn.textContent = cat.replace(/ \(.+\)/, '');
+  btn.textContent = item.label;
+  if (idx === 0) btn.classList.add('active');
   btn.addEventListener('click', () => {
     setActiveNav(btn);
-    render(cat);
+    currentFilter = item.filter;
+    render(item.filter);
   });
   nav.appendChild(btn);
 });
@@ -32,11 +37,16 @@ function setActiveNav(activeBtn) {
 }
 
 // Render
-function render(filterCategory, searchTerm) {
+function render(filter, searchTerm) {
   let data = TEENIEPING_DATA;
 
-  if (filterCategory) {
-    data = data.filter(t => t.category === filterCategory);
+  if (filter) {
+    if (filter.type === 'season') {
+      // Season filter includes villains from the same season
+      data = data.filter(t => t.season === filter.value);
+    } else if (filter.type === 'tier') {
+      data = data.filter(t => t.tier === filter.value);
+    }
   }
 
   if (searchTerm) {
@@ -48,22 +58,28 @@ function render(filterCategory, searchTerm) {
     return;
   }
 
-  // Group by category
+  // Group by collection + season, preserving insertion order
   const grouped = {};
+  const groupOrder = [];
   data.forEach(t => {
-    if (!grouped[t.category]) grouped[t.category] = [];
-    grouped[t.category].push(t);
+    const key = t.collection + (t.season ? ' ' + t.season : '');
+    if (!grouped[key]) {
+      grouped[key] = [];
+      groupOrder.push(key);
+    }
+    grouped[key].push(t);
   });
 
   app.innerHTML = '';
 
-  Object.entries(grouped).forEach(([cat, items]) => {
+  groupOrder.forEach(key => {
+    const items = grouped[key];
     const section = document.createElement('section');
     section.className = 'category-section';
 
     const title = document.createElement('h2');
     title.className = 'category-title';
-    title.innerHTML = `${cat} <span class="category-badge">${items.length}마리</span>`;
+    title.innerHTML = `${key} <span class="category-badge">${items.length}마리</span>`;
     section.appendChild(title);
 
     const grid = document.createElement('div');
@@ -71,7 +87,7 @@ function render(filterCategory, searchTerm) {
 
     items.forEach(item => {
       const card = document.createElement('div');
-      card.className = `card ${item.type}`;
+      card.className = `card ${item.tier}`;
 
       const imgWrap = document.createElement('div');
       imgWrap.className = 'card-image';
@@ -114,7 +130,8 @@ overlay.innerHTML = `
     <div class="modal-image"></div>
     <div class="modal-body">
       <div class="modal-name"></div>
-      <div class="modal-category"></div>
+      <div class="modal-tags"></div>
+      <div class="modal-description"></div>
       <div class="modal-actions">
         <a class="modal-coloring" href="#" target="_blank" rel="noopener">색칠공부</a>
         <button class="modal-close">닫기</button>
@@ -130,6 +147,9 @@ overlay.addEventListener('click', (e) => {
   }
 });
 
+const TIER_LABEL = { royal: '로열', legend: '레전드', villain: '빌런' };
+const TIER_CLASS = { royal: 'tier-royal', legend: 'tier-legend', villain: 'tier-villain' };
+
 function showModal(item) {
   const modalImg = overlay.querySelector('.modal-image');
   if (item.image) {
@@ -138,14 +158,36 @@ function showModal(item) {
   } else {
     modalImg.innerHTML = '<div class="placeholder" style="font-size:80px">🧚</div>';
   }
+
   overlay.querySelector('.modal-name').textContent = item.name;
-  overlay.querySelector('.modal-category').textContent = item.category;
+
+  // Tags: tier badge + season · collection
+  const tagsEl = overlay.querySelector('.modal-tags');
+  let tagsHtml = '';
+  if (item.tier !== 'normal') {
+    tagsHtml += `<span class="tier-badge ${TIER_CLASS[item.tier]}">${TIER_LABEL[item.tier]}</span>`;
+  }
+  const infoText = [item.season, item.collection].filter(Boolean).join(' · ');
+  if (infoText) {
+    tagsHtml += `<span class="modal-season-info">${infoText}</span>`;
+  }
+  tagsEl.innerHTML = tagsHtml;
+
+  // Description
+  const descEl = overlay.querySelector('.modal-description');
+  if (item.description) {
+    descEl.textContent = item.description;
+    descEl.style.display = '';
+  } else {
+    descEl.textContent = '';
+    descEl.style.display = 'none';
+  }
+
   overlay.querySelector('.modal-coloring').href = `https://www.google.com/search?q=${encodeURIComponent(item.name + ' 색칠공부')}&tbm=isch`;
   overlay.classList.add('active');
 }
 
 // Search
-let currentCategory = null;
 searchInput.addEventListener('input', (e) => {
   const term = e.target.value.trim();
   if (term) {

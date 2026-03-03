@@ -1,13 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:namu.wiki)",
       "Bash(curl:*)",
       "Bash(pip3 show:*)",
       "Bash(pip3 install:*)",
       "Bash(python3:*)",
       "WebFetch(domain:smok95.github.io)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "WebSearch",      
+      "Bash(python:*)"
     ]
   }
 }
